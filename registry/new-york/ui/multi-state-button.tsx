@@ -89,7 +89,11 @@ export function MultiStateButton<TKey extends string>({
       type={type}
       style={{ height: BUTTON_HEIGHT_PX }}
       className={cn(
-        "relative overflow-hidden",
+        // CSS transition-all from the shadcn Button cva fights motion's
+        // `layout` (transform: scaleX) animation, causing the text inside
+        // to stretch. Restrict CSS transitions to colors only — motion
+        // owns everything transform-related.
+        "relative overflow-hidden transition-colors",
         !isInteractive && NON_INTERACTIVE,
         KEEP_OPACITY,
         stateConfig.className,
