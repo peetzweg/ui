@@ -1,0 +1,35 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "peet-ui",
+  "homepage": "https://github.com/peetzweg/ui",
+  "items": [
+    {
+      "name": "multi-state-button",
+      "type": "registry:ui",
+      "title": "MultiStateButton",
+      "description": "Generic multi-state animated button with slot-machine label transitions. Domain-agnostic; bring your own state union.",
+      "dependencies": ["motion", "lucide-react"],
+      "registryDependencies": ["button"],
+      "files": [
+        {
+          "path": "registry/new-york/ui/multi-state-button.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "transaction-button",
+      "type": "registry:ui",
+      "title": "TransactionButton",
+      "description": "Transaction-submission preset over MultiStateButton. Seven-state lifecycle (idle / ready / signing / broadcasting / bestBlock / finalized / failed) with sensible defaults and auto-preventDefault on terminal-state clicks.",
+      "dependencies": ["motion", "lucide-react"],
+      "registryDependencies": ["button", "multi-state-button"],
+      "files": [
+        {
+          "path": "registry/new-york/ui/transaction-button.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    }
+  ]
+}
