@@ -2,13 +2,13 @@
   "name": "registry",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "packageManager": "pnpm@10.33.0",
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "registry:build": "shadcn build"
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "lint": "eslint ."
   },
   "dependencies": {
     "@radix-ui/react-label": "^2.1.7",
@@ -17,24 +17,26 @@
     "clsx": "^2.1.1",
     "lucide-react": "^0.487.0",
     "motion": "^12.38.0",
-    "next": "15.5.9",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "shadcn": "^4.7.0",
     "tailwind-merge": "^3.3.1",
-    "tw-animate-css": "^1.3.6",
-    "zod": "^3.25.76"
+    "tw-animate-css": "^1.3.6"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3.3.1",
-    "@tailwindcss/postcss": "^4.1.11",
+    "@eslint/js": "^9.32.0",
+    "@tailwindcss/vite": "^4.1.11",
     "@types/node": "^20.19.9",
     "@types/react": "19.1.2",
     "@types/react-dom": "19.1.2",
+    "@vitejs/plugin-react": "^4.3.4",
     "eslint": "^9.32.0",
-    "eslint-config-next": "15.3.1",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "eslint-plugin-react-refresh": "^0.4.16",
+    "globals": "^15.14.0",
     "tailwindcss": "^4.1.11",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.20.0",
+    "vite": "^6.0.7"
   },
   "pnpm": {
     "overrides": {
@@ -42,10 +44,7 @@
       "@types/react-dom": "19.1.2"
     },
     "onlyBuiltDependencies": [
-      "@tailwindcss/oxide",
-      "msw",
-      "sharp",
-      "unrs-resolver"
+      "@tailwindcss/oxide"
     ]
   }
 }

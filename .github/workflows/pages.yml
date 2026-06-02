@@ -32,20 +32,17 @@ jobs:
       - name: Install
         run: pnpm install --frozen-lockfile
 
-      - name: Build registry JSON
-        run: pnpm registry:build
-
-      - name: Build Next.js (static export)
+      - name: Build showcase (Vite static export)
         run: pnpm build
 
       - name: Add .nojekyll
-        run: touch out/.nojekyll
+        run: touch dist/.nojekyll
 
       - uses: actions/configure-pages@v5
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: out
+          path: dist
 
   deploy:
     needs: build
