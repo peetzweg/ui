@@ -31,3 +31,7 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# Prototype archives + working copies (kept local, not committed)
+/prototypes/*.zip
+/prototypes/_extracted/

@@ -1,6 +1,7 @@
 import type { ComponentType } from "react"
 import { MultiStateButtonDemo } from "@/registry/new-york/examples/multi-state-button-demo"
 import { TransactionButtonDemo } from "@/registry/new-york/examples/transaction-button-demo"
+import { TimeMachineDemo } from "@/registry/new-york/examples/time-machine-demo"
 
 export type ShowcaseItem = {
   /** Anchor id — README deep-links to `#${id}`. */
@@ -29,5 +30,13 @@ export const components: ShowcaseItem[] = [
       "Seven-state transaction-submission preset over MultiStateButton. Idle → ready → signing → broadcasting → bestBlock → finalized / failed.",
     install: "pnpm dlx shadcn@latest add peetzweg/ui/transaction-button",
     Demo: TransactionButtonDemo,
+  },
+  {
+    id: "time-machine",
+    title: "TimeMachine",
+    description:
+      "Stacked-frame gallery with a 3D-recede animation. Size-agnostic; bring your own frames (images or any React node). Scroll, keyboard, or controlled — demo is controlled.",
+    install: "pnpm dlx shadcn@latest add peetzweg/ui/time-machine",
+    Demo: TimeMachineDemo,
   },
 ]

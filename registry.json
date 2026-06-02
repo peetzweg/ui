@@ -30,6 +30,19 @@
           "type": "registry:ui"
         }
       ]
+    },
+    {
+      "name": "time-machine",
+      "type": "registry:ui",
+      "title": "TimeMachine",
+      "description": "Stacked-frame gallery with a 3D-recede animation. Size-agnostic; bring your own frames (images or any React node). Scroll, keyboard, or controlled.",
+      "dependencies": ["motion"],
+      "files": [
+        {
+          "path": "registry/new-york/ui/time-machine.tsx",
+          "type": "registry:ui"
+        }
+      ]
     }
   ]
 }
