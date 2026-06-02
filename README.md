@@ -45,13 +45,16 @@ pnpm dlx shadcn@latest add  peetzweg/ui/transaction-button --dry-run
 
 ## Local development
 
-The showcase site is a plain Vite + React app deployed to GitHub Pages.
+The docs site is built with [Vocs](https://vocs.dev) (React + Vite) and
+deployed static to GitHub Pages. Each component has its own page with live
+demos, multiple states, and a props table.
 
 ```bash
 pnpm install
-pnpm dev       # http://localhost:5173 — live component previews
-pnpm build     # type-check + static build into dist/
-pnpm preview   # serve the production build locally
+pnpm dev        # http://localhost:5173 — docs with live demos
+pnpm build      # static build into dist/
+pnpm preview    # serve the production build locally
+pnpm typecheck  # tsc --noEmit over components + docs
 ```
 
 ## Repo layout
@@ -61,10 +64,12 @@ registry.json                           # registry manifest — the source of tr
 registry/new-york/
   ui/multi-state-button.tsx             # distributed component
   ui/transaction-button.tsx             # distributed component
+  ui/time-machine.tsx                   # distributed component
   ui/{button,card,input,label,...}.tsx  # shadcn primitives used locally by the demos
-  examples/                             # demos shown in the showcase; not distributed
-src/                                    # the Vite showcase app (App.tsx, showcase.tsx)
-.github/workflows/pages.yml             # builds src/ and deploys dist/ to GitHub Pages
+  examples/                             # interactive demos imported by the docs; not distributed
+vocs.config.ts                          # docs site config (nav, basePath, @ alias)
+src/pages/                              # docs: *.mdx pages + _components/ + _root.css
+.github/workflows/pages.yml             # builds the Vocs site and deploys dist/ to GitHub Pages
 ```
 
 ### Adding a component
@@ -72,5 +77,5 @@ src/                                    # the Vite showcase app (App.tsx, showca
 1. Add the component under `registry/new-york/ui/` and an example under
    `registry/new-york/examples/`.
 2. Register it in `registry.json`.
-3. Add an entry to `components` in `src/showcase.tsx` (this drives the showcase
-   and gives it a `#anchor` to link from this README).
+3. Add a `src/pages/<name>.mdx` page (live demo + props table) and a sidebar
+   entry in `vocs.config.ts`.

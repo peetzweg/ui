@@ -32,17 +32,17 @@ jobs:
       - name: Install
         run: pnpm install --frozen-lockfile
 
-      - name: Build showcase (Vite static export)
+      - name: Build docs (Vocs static export)
         run: pnpm build
 
       - name: Add .nojekyll
-        run: touch dist/.nojekyll
+        run: touch dist/public/.nojekyll
 
       - uses: actions/configure-pages@v5
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: dist/public
 
   deploy:
     needs: build

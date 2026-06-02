@@ -1,0 +1,27 @@
+# peet/ui
+
+A small shadcn-compatible registry of animated, motion-based primitives.
+
+This is a [GitHub registry](https://ui.shadcn.com/docs/registry/github) — the
+shadcn CLI reads `registry.json` and the component source directly from the
+repo, so there's no registry server and no hosted JSON. Install any component
+with:
+
+```bash
+pnpm dlx shadcn@latest add peetzweg/ui/<component>
+```
+
+Pin to a tag, branch, or commit for reproducibility:
+
+```bash
+pnpm dlx shadcn@latest add peetzweg/ui/time-machine#main
+```
+
+## Components
+
+- [**MultiStateButton**](/multi-state-button) — generic multi-state animated button with slot-machine label transitions.
+- [**TransactionButton**](/transaction-button) — seven-state transaction-submission preset over MultiStateButton.
+- [**TimeMachine**](/time-machine) — stacked-frame gallery with a 3D-recede animation.
+
+Every component is plain React — no framework lock-in — and depends only on
+`motion` (and `lucide-react` where icons are used).

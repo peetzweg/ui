@@ -35,3 +35,6 @@ yarn-error.log*
 # Prototype archives + working copies (kept local, not committed)
 /prototypes/*.zip
 /prototypes/_extracted/
+
+# Vocs route typegen (auto-generated)
+/src/pages.gen.ts

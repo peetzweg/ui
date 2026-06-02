@@ -1,0 +1,65 @@
+import { TimeMachineDemo } from '@/registry/new-york/examples/time-machine-demo'
+import { TimeMachineSizes } from './_components/TimeMachineSizes'
+import { Preview } from './_components/Preview'
+
+# TimeMachine
+
+A stacked-frame gallery with a 3D-recede animation. Frames recede with a spring
+as the active index advances; passed frames blur and fade out. Bring your own
+frames — images or any React node — and drive it by scroll, keyboard, or a
+controlled index.
+
+<Preview>
+  <TimeMachineDemo />
+</Preview>
+
+The demo above is `controlled` (Prev / Next). In `scroll` mode the component
+scrubs on wheel within its own bounds; arrow keys work in `scroll` and
+`keyboard` modes.
+
+## Sizes
+
+The recede math is relative, so it's size-independent — set the size on the
+root (or per frame) and it just works:
+
+<TimeMachineSizes />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add peetzweg/ui/time-machine
+```
+
+Depends only on `motion`.
+
+## Usage
+
+```tsx
+import { TimeMachine } from "@/components/ui/time-machine"
+
+const frames = [
+  { src: "/1.jpg", alt: "" },
+  { src: "/2.jpg", alt: "" },
+  // …or any React node: <Card/>, <video/>, etc.
+]
+
+<TimeMachine items={frames} className="h-[400px] w-full" />
+```
+
+## Props
+
+| Prop            | Type                                              | Default                              | Description                                            |
+| --------------- | ------------------------------------------------- | ------------------------------------ | ------------------------------------------------------ |
+| `items`         | `TimeMachineItem[]`                               | —                                    | Frames: `{ src, alt? }` descriptors or any React node. |
+| `driver`        | `"scroll" \| "keyboard" \| "controlled"`          | `"scroll"`                           | How the active frame advances.                         |
+| `activeIndex`   | `number`                                          | —                                    | Controlled index.                                      |
+| `defaultIndex`  | `number`                                          | `0`                                  | Initial index when uncontrolled.                       |
+| `onIndexChange` | `(index: number) => void`                         | —                                    | Fires when the active frame changes.                   |
+| `framesVisible` | `number`                                          | `3`                                  | Depth of the receding stack.                           |
+| `frameOffset`   | `number`                                          | `-30`                                | Vertical px offset per depth step.                     |
+| `scaleStep`     | `number`                                          | `0.08`                               | Scale removed per depth step.                          |
+| `snapDistance`  | `number`                                          | `50`                                 | Wheel px required to advance one frame (`scroll`).     |
+| `loop`          | `boolean`                                         | `false`                              | Wrap around at the ends.                               |
+| `spring`        | `{ stiffness?; damping?; mass? }`                 | `{ stiffness: 250, damping: 20, mass: 0.5 }` | Frame transition spring.                       |
+| `frameClassName`| `string`                                          | —                                    | Classes on each frame (set the frame size here).       |
+| `className`     | `string`                                          | —                                    | Classes on the root (set the overall size here).       |

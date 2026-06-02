@@ -1,0 +1,20 @@
+diff --git a/dist/cli.js b/dist/cli.js
+index a4640d68cf357cb02c3e6c1f276c2f25c8aca812..65636e39f624b166599ec34c2e56677ebd3e3b87 100755
+--- a/dist/cli.js
++++ b/dist/cli.js
+@@ -24,6 +24,7 @@ cli
+     .action(async (options) => {
+     const server = await vite.createServer({
+         configFile: false,
++        resolve: { alias: { '@': process.cwd() } },
+         plugins: [react(), vocs()],
+         server: {
+             port: options.port,
+@@ -37,6 +38,7 @@ cli.command('build', 'Build for production').action(async () => {
+     const config = await Config.resolve();
+     const builder = await vite.createBuilder({
+         configFile: false,
++        resolve: { alias: { '@': process.cwd() } },
+         plugins: [react(), vocs()],
+         build: {
+             outDir: config.outDir,

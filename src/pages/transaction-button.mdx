@@ -1,0 +1,61 @@
+import { TransactionButtonDemo } from '@/registry/new-york/examples/transaction-button-demo'
+import { TransactionButtonStates } from './_components/TransactionButtonStates'
+import { Preview } from './_components/Preview'
+
+# TransactionButton
+
+A transaction-submission preset over [MultiStateButton](/multi-state-button).
+Ships a seven-state lifecycle with default content and a colour palette per
+state, so the common case is zero-config. Everything stays overridable per
+state.
+
+<Preview>
+  <TransactionButtonDemo />
+</Preview>
+
+## States
+
+`idle → ready → signing → broadcasting → bestBlock → finalized / failed`. Each
+renders out of the box:
+
+<TransactionButtonStates />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add peetzweg/ui/transaction-button
+```
+
+Pulls `multi-state-button` (a `registryDependency`), shadcn's `button`, plus
+`motion` and `lucide-react`.
+
+## Usage
+
+```tsx
+import { TransactionButton } from "@/components/ui/transaction-button"
+
+<form onSubmit={submit}>
+  <TransactionButton
+    state={txState}
+    type="submit"
+    states={{ ready: { content: "Sign & Submit" } }}
+  />
+</form>
+```
+
+The `ready` state submits the surrounding form on click; non-`ready` clicks
+auto-`preventDefault()` so terminal-state handlers (e.g. open in explorer)
+don't re-submit.
+
+## Props
+
+| Prop        | Type                                                            | Default            | Description                                       |
+| ----------- | --------------------------------------------------------------- | ------------------ | ------------------------------------------------- |
+| `state`     | `TransactionButtonState`                                        | —                  | One of the seven lifecycle states.                |
+| `states`    | `Partial<Record<TransactionButtonState, TransactionButtonStateConfig>>` | built-in defaults | Override content / className / disabled / onClick per state. |
+| `className` | `string`                                                        | —                  | Extra classes merged onto the button.             |
+| `type`      | `"button" \| "submit" \| "reset"`                               | `"button"`         | Native button type.                               |
+
+`TransactionButtonStateConfig` mirrors `MultiStateButtonStateConfig`, except
+`disabled` defaults to `false` for `ready` and `true` for every other state,
+and `onClick` is `() => void`.

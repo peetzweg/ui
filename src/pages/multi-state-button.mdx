@@ -1,0 +1,59 @@
+import { MultiStateButtonDemo } from '@/registry/new-york/examples/multi-state-button-demo'
+import { Preview } from './_components/Preview'
+
+# MultiStateButton
+
+Generic multi-state animated button with a slot-machine / vertical-wheel label
+transition between states. Domain-agnostic: you own the state union, each
+state's content and styling, and which states are interactive. Honors
+`prefers-reduced-motion`.
+
+<Preview>
+  <MultiStateButtonDemo />
+</Preview>
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add peetzweg/ui/multi-state-button
+```
+
+Depends on `motion`, `lucide-react`, and shadcn's `button`.
+
+## Usage
+
+```tsx
+import { MultiStateButton } from "@/components/ui/multi-state-button"
+
+type State = "idle" | "loading" | "done"
+
+<MultiStateButton<State>
+  state={state}
+  states={{
+    idle: { content: "Run", disabled: false, onClick: run },
+    loading: { content: "Working…" },
+    done: { content: "Done", disabled: false, onClick: reset },
+  }}
+/>
+```
+
+The state union is a generic type parameter, so `state` and the keys of
+`states` are checked against each other.
+
+## Props
+
+| Prop        | Type                                      | Default     | Description                                  |
+| ----------- | ----------------------------------------- | ----------- | -------------------------------------------- |
+| `state`     | `TKey`                                    | —           | The currently active state key.              |
+| `states`    | `Record<TKey, MultiStateButtonStateConfig>` | —         | Per-state configuration (see below).         |
+| `className` | `string`                                  | —           | Extra classes merged onto the button.        |
+| `type`      | `"button" \| "submit" \| "reset"`         | `"button"`  | Native button type.                          |
+
+### `MultiStateButtonStateConfig`
+
+| Field       | Type                                            | Default | Description                                                        |
+| ----------- | ----------------------------------------------- | ------- | ------------------------------------------------------------------ |
+| `content`   | `React.ReactNode`                               | —       | Node rendered inside the button for this state.                    |
+| `className` | `string`                                        | —       | Extra classes for this state only.                                 |
+| `disabled`  | `boolean`                                       | `true`  | Disabled by default — opt a state into being interactive with `false`. |
+| `onClick`   | `(e: React.MouseEvent<HTMLButtonElement>) => void` | —    | Click handler; receives the native event.                          |
