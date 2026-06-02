@@ -12,18 +12,25 @@ const IMAGES = [
   "harbor",
   "aurora",
   "meadow",
-].map((seed) => ({
-  src: `https://picsum.photos/seed/${seed}/600/400`,
-  alt: seed,
-}))
+].map((seed) => `https://picsum.photos/seed/${seed}/600/400`)
 
 export function TimeMachineDemo() {
   const [index, setIndex] = React.useState(0)
 
+  // You own each frame's appearance — here, a rounded, bordered image card.
+  const frames = IMAGES.map((src, i) => (
+    <div
+      key={i}
+      className="h-48 w-72 overflow-hidden rounded-xl border bg-card shadow-lg"
+    >
+      <img src={src} alt="" className="h-full w-full object-cover" />
+    </div>
+  ))
+
   return (
     <div className="flex w-full flex-col items-center gap-4">
       <TimeMachine
-        items={IMAGES}
+        items={frames}
         driver="controlled"
         activeIndex={index}
         onIndexChange={setIndex}

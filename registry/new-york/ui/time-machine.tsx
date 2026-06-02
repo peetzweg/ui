@@ -5,18 +5,17 @@ import { motion } from "motion/react"
 
 import { cn } from "@/lib/utils"
 
-type TimeMachineImage = { src: string; alt?: string }
-
-/** A frame can be an image descriptor or any React node (card, video, …). */
-export type TimeMachineItem = React.ReactNode | TimeMachineImage
-
 export interface TimeMachineProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
-  /** Frames to stack, front-to-back. */
-  items: TimeMachineItem[]
+  /**
+   * Frames to stack, front-to-back. Each is a fully-styled React node — the
+   * component owns only the stacking, cycling, and recede animation, never a
+   * frame's appearance (size, border, radius, background, contents are yours).
+   */
+  items: React.ReactNode[]
   /**
    * How the active frame advances:
-   * - `scroll` — wheel over the component (scoped to it; no page-scroll hijack of the body)
+   * - `scroll` — wheel over the component (scoped to it; no page-scroll hijack)
    * - `keyboard` — arrow keys only
    * - `controlled` — parent owns `activeIndex`; no internal listeners
    *
@@ -38,22 +37,15 @@ export interface TimeMachineProps
   snapDistance?: number
   /** Wrap around at the ends. */
   loop?: boolean
+  /** Blur (px) applied to frames you've moved past. `0` disables. */
+  blur?: number
   spring?: { stiffness?: number; damping?: number; mass?: number }
-  /** Class applied to each frame — set the frame's size here. */
+  /** Extra classes on each frame wrapper (e.g. one uniform size). No defaults. */
   frameClassName?: string
 }
 
 function clamp(value: number, [min, max]: [number, number]) {
   return Math.min(Math.max(value, min), max)
-}
-
-function isImage(item: TimeMachineItem): item is TimeMachineImage {
-  return (
-    typeof item === "object" &&
-    item !== null &&
-    "src" in item &&
-    typeof (item as TimeMachineImage).src === "string"
-  )
 }
 
 const DEFAULT_SPRING = { stiffness: 250, damping: 20, mass: 0.5 }
@@ -71,6 +63,7 @@ export const TimeMachine = React.forwardRef<HTMLDivElement, TimeMachineProps>(
       scaleStep = 0.08,
       snapDistance = 50,
       loop = false,
+      blur = 2,
       spring,
       frameClassName,
       className,
@@ -161,10 +154,7 @@ export const TimeMachine = React.forwardRef<HTMLDivElement, TimeMachineProps>(
     return (
       <div
         ref={setRefs}
-        className={cn(
-          "relative grid h-full w-full place-items-center overflow-hidden",
-          className,
-        )}
+        className={cn("relative grid h-full w-full place-items-center", className)}
         {...props}
       >
         {items.map((item, i) => {
@@ -179,32 +169,22 @@ export const TimeMachine = React.forwardRef<HTMLDivElement, TimeMachineProps>(
           return (
             <motion.div
               key={i}
-              className={cn(
-                "[grid-area:1/1] aspect-[3/2] w-2/3 overflow-hidden rounded-lg border bg-card",
-                frameClassName,
-              )}
+              className={cn("[grid-area:1/1]", frameClassName)}
               initial={false}
               animate={{ y, scale, transition }}
               style={{
-                borderWidth: 2 / scale,
                 opacity: passed ? 0 : 1,
-                filter: `blur(${passed ? 2 : 0}px)`,
+                filter: passed && blur ? `blur(${blur}px)` : undefined,
                 transitionProperty: "opacity, filter",
                 transitionDuration: "200ms",
                 transitionTimingFunction: "ease-in-out",
                 willChange: "opacity, filter, transform",
                 zIndex: items.length - i,
+                // Hidden (passed) frames shouldn't intercept clicks on links etc.
+                pointerEvents: passed ? "none" : undefined,
               }}
             >
-              {isImage(item) ? (
-                <img
-                  src={item.src}
-                  alt={item.alt ?? ""}
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                item
-              )}
+              {item}
             </motion.div>
           )
         })}

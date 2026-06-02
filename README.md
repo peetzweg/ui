@@ -9,9 +9,9 @@ Live showcase: **https://peetzweg.github.io/ui**
 
 | Name                 | Showcase                                                       | What                                                                                                                                                          |
 | -------------------- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `multi-state-button` | [demo](https://peetzweg.github.io/ui/#multi-state-button)      | Generic multi-state animated button with a slot-machine label transition. Generic state union; you own every state's content, styling, and click behaviour.  |
-| `transaction-button` | [demo](https://peetzweg.github.io/ui/#transaction-button)      | Transaction-submission preset over `MultiStateButton`. Seven-state lifecycle (idle / ready / signing / broadcasting / bestBlock / finalized / failed).        |
-| `time-machine`       | [demo](https://peetzweg.github.io/ui/#time-machine)            | Stacked-frame gallery with a 3D-recede animation. Size-agnostic; bring your own frames (images or any React node); scroll / keyboard / controlled. |
+| `multi-state-button` | [demo](https://peetzweg.github.io/ui/multi-state-button)       | Generic multi-state animated button with a slot-machine label transition. Generic state union; you own every state's content, styling, and click behaviour.  |
+| `transaction-button` | [demo](https://peetzweg.github.io/ui/transaction-button)       | Transaction-submission preset over `MultiStateButton`. Seven-state lifecycle (idle / ready / signing / broadcasting / bestBlock / finalized / failed).        |
+| `time-machine`       | [demo](https://peetzweg.github.io/ui/time-machine)             | A stack of frames you cycle/scroll through, with a 3D-recede animation. Headless — you fully style each frame (any React node); scroll / keyboard / controlled. |
 
 ## Install
 

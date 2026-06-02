@@ -1,13 +1,16 @@
 import { TimeMachineDemo } from '@/registry/new-york/examples/time-machine-demo'
 import { TimeMachineSizes } from './_components/TimeMachineSizes'
+import { TimeMachineCards } from './_components/TimeMachineCards'
 import { Preview } from './_components/Preview'
 
 # TimeMachine
 
-A stacked-frame gallery with a 3D-recede animation. Frames recede with a spring
-as the active index advances; passed frames blur and fade out. Bring your own
-frames — images or any React node — and drive it by scroll, keyboard, or a
-controlled index.
+A stack of frames you cycle and scroll through, with a 3D-recede animation:
+frames recede with a spring as the active index advances, and passed frames
+blur and fade out. It owns **only the stack** — the cycling, scrolling, and
+recede motion. **You own each frame entirely**: size, aspect ratio, border,
+background, and contents (an image, a card, a link, an auto-playing slideshow —
+any React node).
 
 <Preview>
   <TimeMachineDemo />
@@ -17,10 +20,29 @@ The demo above is `controlled` (Prev / Next). In `scroll` mode the component
 scrubs on wheel within its own bounds; arrow keys work in `scroll` and
 `keyboard` modes.
 
-## Sizes
+## Bring your own frame
 
-The recede math is relative, so it's size-independent — set the size on the
-root (or per frame) and it just works:
+Because `items` is just `ReactNode[]`, the frame shape and style are yours —
+here the same stack rendered as horizontal and vertical credit cards (the
+ISO `1.586` ratio), each a gradient card the component never styles:
+
+<TimeMachineCards />
+
+```tsx
+const cards = accounts.map((a) => (
+  <a href={a.href} className="aspect-[1.586/1] w-80 rounded-2xl …">
+    {/* your border, gradient, chip, even a nested slideshow */}
+  </a>
+))
+
+<TimeMachine items={cards} className="h-[240px] w-[360px]" />
+```
+
+## Uniform sizing
+
+If every frame should share one size/style, set it once via `frameClassName`
+instead of on each item — the recede math is size-independent, so the same
+component works at any scale:
 
 <TimeMachineSizes />
 
@@ -37,11 +59,11 @@ Depends only on `motion`.
 ```tsx
 import { TimeMachine } from "@/components/ui/time-machine"
 
-const frames = [
-  { src: "/1.jpg", alt: "" },
-  { src: "/2.jpg", alt: "" },
-  // …or any React node: <Card/>, <video/>, etc.
-]
+const frames = photos.map((src) => (
+  <div key={src} className="h-48 w-72 overflow-hidden rounded-xl border">
+    <img src={src} alt="" className="h-full w-full object-cover" />
+  </div>
+))
 
 <TimeMachine items={frames} className="h-[400px] w-full" />
 ```
@@ -50,7 +72,7 @@ const frames = [
 
 | Prop            | Type                                              | Default                              | Description                                            |
 | --------------- | ------------------------------------------------- | ------------------------------------ | ------------------------------------------------------ |
-| `items`         | `TimeMachineItem[]`                               | —                                    | Frames: `{ src, alt? }` descriptors or any React node. |
+| `items`         | `React.ReactNode[]`                               | —                                    | Frames to stack. Each is fully styled by you.          |
 | `driver`        | `"scroll" \| "keyboard" \| "controlled"`          | `"scroll"`                           | How the active frame advances.                         |
 | `activeIndex`   | `number`                                          | —                                    | Controlled index.                                      |
 | `defaultIndex`  | `number`                                          | `0`                                  | Initial index when uncontrolled.                       |
@@ -60,6 +82,7 @@ const frames = [
 | `scaleStep`     | `number`                                          | `0.08`                               | Scale removed per depth step.                          |
 | `snapDistance`  | `number`                                          | `50`                                 | Wheel px required to advance one frame (`scroll`).     |
 | `loop`          | `boolean`                                         | `false`                              | Wrap around at the ends.                               |
+| `blur`          | `number`                                          | `2`                                  | Blur (px) on passed frames; `0` disables.              |
 | `spring`        | `{ stiffness?; damping?; mass? }`                 | `{ stiffness: 250, damping: 20, mass: 0.5 }` | Frame transition spring.                       |
-| `frameClassName`| `string`                                          | —                                    | Classes on each frame (set the frame size here).       |
+| `frameClassName`| `string`                                          | —                                    | Extra classes on every frame wrapper (e.g. one size).  |
 | `className`     | `string`                                          | —                                    | Classes on the root (set the overall size here).       |
