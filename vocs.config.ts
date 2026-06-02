@@ -1,11 +1,16 @@
 import { defineConfig } from "vocs/config"
 
+// Project site is served at peetzweg.github.io/ui, so assets need the "/ui"
+// prefix in CI. Locally everything is served from the root.
+const base = process.env.GITHUB_ACTIONS === "true" ? "/ui" : ""
+
 export default defineConfig({
-  title: "peet/ui",
+  title: "peetzweg/ui",
   description:
     "A shadcn-compatible registry of animated, motion-based UI primitives.",
-  // Project site lives at peetzweg.github.io/ui; root locally.
-  basePath: process.env.GITHUB_ACTIONS === "true" ? "/ui" : "/",
+  basePath: base || "/",
+  // Vocs injects <link rel="icon"> from this raw href, so prefix the base.
+  iconUrl: `${base}/favicon.svg`,
   // Emit a fully static site for GitHub Pages.
   renderStrategy: "full-static",
   topNav: [{ text: "GitHub", link: "https://github.com/peetzweg/ui" }],

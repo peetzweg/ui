@@ -32,7 +32,7 @@ function CreditCard({
       )}
     >
       <div className="flex items-center justify-between text-[10px] font-medium uppercase tracking-[0.2em] opacity-80">
-        <span>peet/ui</span>
+        <span>peetzweg/ui</span>
         <span>credit</span>
       </div>
       <div className="h-6 w-9 rounded-md bg-white/30" />
