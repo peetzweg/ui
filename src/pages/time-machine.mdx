@@ -1,6 +1,7 @@
 import { TimeMachineDemo } from '@/registry/new-york/examples/time-machine-demo'
 import { TimeMachineSizes } from './_components/TimeMachineSizes'
 import { TimeMachineCards } from './_components/TimeMachineCards'
+import { TimeMachineMixed } from './_components/TimeMachineMixed'
 import { Preview } from './_components/Preview'
 
 # TimeMachine
@@ -37,6 +38,15 @@ const cards = accounts.map((a) => (
 
 <TimeMachine items={cards} className="h-[240px] w-[360px]" />
 ```
+
+## Mixed shapes & sizes
+
+Frames don't have to match. Each item sizes itself and is centered in the
+stack, so you can mix shapes freely — here a taller, narrower receipt sits
+among vertical credit cards. (Just don't pin a uniform size via
+`frameClassName` when you want them to differ.)
+
+<TimeMachineMixed />
 
 ## Uniform sizing
 
