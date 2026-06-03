@@ -21,6 +21,7 @@ export default defineConfig({
       text: "Primitives",
       items: [
         { text: "MultiStateButton", link: "/multi-state-button" },
+        { text: "ScrollStrip", link: "/scroll-strip" },
         { text: "TimeMachine", link: "/time-machine" },
       ],
     },

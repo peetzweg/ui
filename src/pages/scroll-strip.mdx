@@ -1,0 +1,72 @@
+import { ScrollStripDemo } from '@/registry/new-york/examples/scroll-strip-demo'
+import { Preview } from './_components/Preview'
+
+# ScrollStrip
+
+A horizontal filmstrip of clipped slivers. Every frame is a full-size box
+clipped down to a thin sliver via `clip-path: inset()` — expanding a frame
+just animates the clip open while its neighbors part by exactly the revealed
+amount, so there's no layout thrash.
+
+Scroll to browse (native momentum, collapses the strip), settle to snap to —
+and expand — the nearest frame. Click toggles a frame, arrow keys step while
+expanded, Escape collapses. Scoped to its own container: no page-scroll
+hijacking.
+
+<Preview>
+  <ScrollStripDemo />
+</Preview>
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add peetzweg/ui/scroll-strip
+```
+
+Pulls the [`use-scroll-end`](https://github.com/peetzweg/ui/blob/main/registry/new-york/hooks/use-scroll-end.ts)
+hook and [`clamp`](https://github.com/peetzweg/ui/blob/main/registry/new-york/lib/clamp.ts)
+lib item (both `registryDependencies`), plus `motion`.
+
+## Usage
+
+```tsx
+import { ScrollStrip } from "@/components/ui/scroll-strip"
+
+<ScrollStrip
+  items={images.map((src) => (
+    <img key={src} src={src} className="h-full w-full object-cover" />
+  ))}
+  frameWidth={48}
+  expandedWidth={256}
+  frameHeight={192}
+  expandedHeight={360}
+  frameRadius={10}
+  frameClassName="grayscale data-[active=true]:grayscale-0 transition-[filter]"
+/>
+```
+
+Frames are headless: each item fills the *expanded* box (`expandedWidth` wide)
+and shows through the sliver clip while collapsed — so content should cover
+the box, e.g. an `object-cover` image. Style state via the
+`data-active="true" | "false"` attribute on each frame wrapper.
+
+## Props
+
+| Prop                 | Type                              | Default    | Description                                            |
+| -------------------- | --------------------------------- | ---------- | ------------------------------------------------------ |
+| `items`              | `ScrollStripItem[]`               | —          | Frame contents — nodes, or `({ active, index }) => ReactNode` render functions. Each fills the expanded box. |
+| `orientation`        | `"horizontal" \| "vertical"`      | `"horizontal"` | Scroll axis; slivers clip along it.                |
+| `frameWidth`         | `number`                          | `72`       | Visible sliver width when collapsed (px).              |
+| `frameHeight`        | `number`                          | `288`      | Collapsed frame height (px).                           |
+| `expandedWidth`      | `number`                          | `480`      | Expanded frame width (px).                             |
+| `expandedHeight`     | `number`                          | `720`      | Expanded frame height; also the strip's height (px).   |
+| `gap`                | `number`                          | `16`       | Gap between slivers (px).                              |
+| `frameRadius`        | `number \| { collapsed?; expanded? }` | `0`    | Corner radius applied through the clip-path (px); per-state values animate with the reveal. |
+| `activeIndex`        | `number \| null`                  | —          | Controlled expanded index; `null` = collapsed.         |
+| `defaultActiveIndex` | `number \| null`                  | `null`     | Initial expanded index when uncontrolled.              |
+| `onActiveIndexChange`| `(index: number \| null) => void` | —          | Notified on expand / collapse / step.                  |
+| `expandOnSettle`     | `boolean`                         | `true`     | Auto-expand the nearest frame when scrolling settles.  |
+| `spring`             | `{ stiffness?; damping?; mass? }` | `500 / 50` | Spring for the expand / part / clip animations.        |
+| `frameClassName`     | `string`                          | —          | Extra classes on each frame wrapper.                   |
+
+Plus all `div` props — `className` / `style` land on the scroll container.

@@ -32,6 +32,44 @@
       ]
     },
     {
+      "name": "clamp",
+      "type": "registry:lib",
+      "title": "clamp",
+      "description": "Clamp a number into an inclusive [min, max] range.",
+      "files": [
+        {
+          "path": "registry/new-york/lib/clamp.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
+      "name": "use-scroll-end",
+      "type": "registry:hook",
+      "title": "useScrollEnd",
+      "description": "Fire a callback when scrolling settles on an element — native scrollend where supported, trailing debounce fallback elsewhere (Safari).",
+      "files": [
+        {
+          "path": "registry/new-york/hooks/use-scroll-end.ts",
+          "type": "registry:hook"
+        }
+      ]
+    },
+    {
+      "name": "scroll-strip",
+      "type": "registry:ui",
+      "title": "ScrollStrip",
+      "description": "Filmstrip of clipped slivers, horizontal or vertical; the active frame expands via a clip-path reveal while neighbors part to make room. Headless frames (nodes or render functions receiving { active }), native container-scoped scroll, snap-and-expand on settle, keyboard nav.",
+      "dependencies": ["motion"],
+      "registryDependencies": ["clamp", "use-scroll-end"],
+      "files": [
+        {
+          "path": "registry/new-york/ui/scroll-strip.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "time-machine",
       "type": "registry:ui",
       "title": "TimeMachine",
