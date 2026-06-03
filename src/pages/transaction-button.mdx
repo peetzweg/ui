@@ -1,13 +1,19 @@
 import { TransactionButtonDemo } from '@/registry/new-york/examples/transaction-button-demo'
 import { TransactionButtonStates } from './_components/TransactionButtonStates'
 import { Preview } from './_components/Preview'
+import { PresetBanner } from './_components/PresetBanner'
 
 # TransactionButton
 
-A transaction-submission preset over [MultiStateButton](/multi-state-button).
-Ships a seven-state lifecycle with default content and a colour palette per
-state, so the common case is zero-config. Everything stays overridable per
-state.
+<PresetBanner base="MultiStateButton" href="/multi-state-button">
+  It bakes in a state union, default content, palette, and form semantics —
+  all of the animation mechanics live in the primitive.
+</PresetBanner>
+
+Ships a seven-state transaction-submission lifecycle with default content and
+a colour palette per state, so the common case is zero-config. Everything
+stays overridable per state; for any other multi-state interaction, drop down
+to the primitive.
 
 <Preview>
   <TransactionButtonDemo />

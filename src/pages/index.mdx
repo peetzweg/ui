@@ -17,11 +17,21 @@ Pin to a tag, branch, or commit for reproducibility:
 pnpm dlx shadcn@latest add peetzweg/ui/time-machine#main
 ```
 
-## Components
+## Primitives
+
+Generic, domain-agnostic mechanics — you own the state union, content, and
+styling:
 
 - [**MultiStateButton**](/multi-state-button) — generic multi-state animated button with slot-machine label transitions.
-- [**TransactionButton**](/transaction-button) — seven-state transaction-submission preset over MultiStateButton.
 - [**TimeMachine**](/time-machine) — stacked-frame gallery with a 3D-recede animation.
+
+## Presets
+
+Opinionated, domain-specific layers over a primitive. A preset bakes in a
+state union, default content, and semantics — the mechanics stay in the
+primitive, and every default remains overridable:
+
+- [**TransactionButton**](/transaction-button) — seven-state transaction-submission preset over [MultiStateButton](/multi-state-button).
 
 Every component is plain React — no framework lock-in — and depends only on
 `motion` (and `lucide-react` where icons are used).

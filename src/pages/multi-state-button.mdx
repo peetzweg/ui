@@ -40,6 +40,13 @@ type State = "idle" | "loading" | "done"
 The state union is a generic type parameter, so `state` and the keys of
 `states` are checked against each other.
 
+## Presets
+
+Opinionated, domain-specific presets built on this primitive — same mechanics,
+defaults baked in:
+
+- [**TransactionButton**](/transaction-button) — seven-state extrinsic-submission lifecycle with default content, palette, and form-submit semantics.
+
 ## Props
 
 | Prop        | Type                                      | Default     | Description                                  |

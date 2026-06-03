@@ -18,12 +18,16 @@ export default defineConfig({
   sidebar: [
     { text: "Overview", link: "/" },
     {
-      text: "Components",
+      text: "Primitives",
       items: [
         { text: "MultiStateButton", link: "/multi-state-button" },
-        { text: "TransactionButton", link: "/transaction-button" },
         { text: "TimeMachine", link: "/time-machine" },
       ],
+    },
+    {
+      // Opinionated, domain-specific presets over the primitives above.
+      text: "Presets",
+      items: [{ text: "TransactionButton", link: "/transaction-button" }],
     },
   ],
 })
