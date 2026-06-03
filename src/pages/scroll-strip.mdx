@@ -1,4 +1,7 @@
 import { ScrollStripDemo } from '@/registry/new-york/examples/scroll-strip-demo'
+import { ScrollStripCardsDemo } from '@/registry/new-york/examples/scroll-strip-cards-demo'
+import { ScrollStripBooksDemo } from '@/registry/new-york/examples/scroll-strip-books-demo'
+import { ScrollStripCassettesDemo } from '@/registry/new-york/examples/scroll-strip-cassettes-demo'
 import { Preview } from './_components/Preview'
 
 # ScrollStrip
@@ -49,6 +52,100 @@ Frames are headless: each item fills the *expanded* box (`expandedWidth` wide)
 and shows through the sliver clip while collapsed — so content should cover
 the box, e.g. an `object-cover` image. Style state via the
 `data-active="true" | "false"` attribute on each frame wrapper.
+
+## Frames as components
+
+Items aren't limited to images — any React component works, and with the
+render-function form an item receives its live `{ active, index }` state, so
+content can restructure itself in and out of focus. Here each collapsed
+sliver is a credit card seen edge-on — standing in a wallet, vertical brand
+name readable — and the proper card face (chip, number, holder) only fades
+in once active:
+
+<Preview>
+  <ScrollStripCardsDemo />
+</Preview>
+
+```tsx
+<ScrollStrip
+  items={cards.map((card) => ({ active }) => (
+    <CreditCard card={card} active={active} />
+  ))}
+  frameWidth={17}
+  expandedWidth={224}
+  frameHeight={220}
+  expandedHeight={354}
+  frameRadius={{ collapsed: 6, expanded: 16 }}
+/>
+```
+
+Frame *geometry* stays prop-driven — the clip reveal and neighbor parting
+need a fixed expanded box to compute against — but everything inside the box
+is yours to animate. CSS transitions keyed off the `active` prop (or the
+`data-active` attribute) sync content changes with the clip opening.
+
+## A different layout per state
+
+The clip only *reveals* — what's painted underneath is entirely up to the
+frame. So the collapsed state doesn't have to be a cropped slice of the
+expanded one: stack two absolutely-positioned layers and cross-fade them on
+`active`. Here the collapsed layer is a book spine — a vertical title sized
+to the sliver, readable without expanding — and the expanded layer is the
+full cover. With `frameHeight === expandedHeight` the spines stand on a
+shelf and the cover opens purely sideways:
+
+<Preview>
+  <ScrollStripBooksDemo />
+</Preview>
+
+```tsx
+function Book({ book, active }: { book: Book; active: boolean }) {
+  return (
+    <div className="relative h-full w-full">
+      {/* spine — readable in the collapsed sliver */}
+      <div className={cn("absolute inset-0 grid place-items-center transition-opacity",
+        active ? "opacity-0" : "opacity-100")}>
+        <span className="[writing-mode:vertical-rl] uppercase tracking-widest">
+          {book.title}
+        </span>
+      </div>
+      {/* cover — full layout, revealed as the clip opens */}
+      <div className={cn("absolute inset-0 p-5 transition-opacity",
+        active ? "opacity-100" : "opacity-0")}>
+        …
+      </div>
+    </div>
+  )
+}
+```
+
+## Vertical
+
+The mechanic is axis-symmetric: with `orientation="vertical"` frames clip to
+*horizontal* slivers in a stack, scrolling is vertical, and ↑/↓ step while
+expanded. A horizontal sliver fits a line of text naturally — here each
+collapsed frame is a cassette's edge label, and expanding pulls the full tape
+face out of the drawer, reels spinning. `frameWidth === expandedWidth`, so
+the face is revealed purely downwards:
+
+<Preview>
+  <ScrollStripCassettesDemo />
+</Preview>
+
+```tsx
+<ScrollStrip
+  orientation="vertical"
+  items={tapes.map((tape) => ({ active }) => (
+    <Cassette tape={tape} active={active} />
+  ))}
+  frameWidth={300}
+  expandedWidth={300}
+  frameHeight={36}
+  expandedHeight={190}
+  frameRadius={8}
+  style={{ height: 420 }}
+/>
+```
 
 ## Props
 
