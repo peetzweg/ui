@@ -13,24 +13,6 @@ recede motion. **You own each frame entirely**: size, aspect ratio, border,
 background, and contents (an image, a card, a link, an auto-playing slideshow —
 any React node).
 
-## Uniform sizing
-
-If every frame should share one size/style, set it once via `frameClassName`
-instead of on each item — the recede math is size-independent, so the same
-component works at any scale:
-
-<TimeMachineSizes />
-
-## Controlled
-
-The interactive form: a `controlled` stack you drive with Prev / Next. In
-`scroll` mode the component scrubs on wheel within its own bounds; arrow keys
-work in `scroll` and `keyboard` modes.
-
-<Preview>
-  <TimeMachineDemo />
-</Preview>
-
 ## Bring your own frame
 
 Because `items` is just `ReactNode[]`, the frame shape and style are yours —
@@ -49,6 +31,16 @@ const cards = accounts.map((a) => (
 <TimeMachine items={cards} className="h-[240px] w-[360px]" />
 ```
 
+## Controlled
+
+The interactive form: a `controlled` stack you drive with Prev / Next. In
+`scroll` mode the component scrubs on wheel within its own bounds; arrow keys
+work in `scroll` and `keyboard` modes.
+
+<Preview>
+  <TimeMachineDemo />
+</Preview>
+
 ## Mixed shapes & sizes
 
 Frames don't have to match. Each item sizes itself and is centered in the
@@ -57,6 +49,14 @@ among vertical credit cards. (Just don't pin a uniform size via
 `frameClassName` when you want them to differ.)
 
 <TimeMachineMixed />
+
+## Uniform sizing
+
+If every frame should share one size/style, set it once via `frameClassName`
+instead of on each item — the recede math is size-independent, so the same
+component works at any scale:
+
+<TimeMachineSizes />
 
 ## Installation
 

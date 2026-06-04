@@ -19,9 +19,9 @@ const frames = IMAGES.map((src, i) => (
 ))
 
 const SIZES = [
+  "h-32 w-44",
   "h-40 w-56",
-  "h-56 w-80",
-  "h-72 w-[28rem]",
+  "h-48 w-72",
 ]
 
 /** The same component at three sizes — the recede math is size-independent. */
