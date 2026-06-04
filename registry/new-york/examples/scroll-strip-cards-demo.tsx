@@ -54,6 +54,48 @@ const CARDS: Card[] = [
     expires: "08/28",
     gradient: "from-sky-400 via-blue-600 to-indigo-800",
   },
+  {
+    bank: "Vesper",
+    number: "4012 8842 1009 5573",
+    holder: "P. Zweg",
+    expires: "04/29",
+    gradient: "from-emerald-500 via-green-600 to-teal-800",
+  },
+  {
+    bank: "Halcyon",
+    number: "5285 1190 7741 3326",
+    holder: "P. Zweg",
+    expires: "12/27",
+    gradient: "from-fuchsia-600 via-pink-600 to-rose-700",
+  },
+  {
+    bank: "Onyx",
+    number: "4539 6612 0083 9145",
+    holder: "P. Zweg",
+    expires: "07/30",
+    gradient: "from-stone-600 via-zinc-700 to-neutral-900",
+  },
+  {
+    bank: "Lumen",
+    number: "5104 7728 3390 2261",
+    holder: "P. Zweg",
+    expires: "02/28",
+    gradient: "from-yellow-400 via-amber-500 to-orange-600",
+  },
+  {
+    bank: "Cobalt",
+    number: "4716 3325 8890 1174",
+    holder: "P. Zweg",
+    expires: "10/29",
+    gradient: "from-blue-600 via-indigo-700 to-violet-800",
+  },
+  {
+    bank: "Verdant",
+    number: "5267 0041 9982 5530",
+    holder: "P. Zweg",
+    expires: "05/31",
+    gradient: "from-lime-500 via-green-600 to-emerald-800",
+  },
 ]
 
 /**
