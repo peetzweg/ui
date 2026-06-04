@@ -79,8 +79,10 @@ by default it clamps at the first and last frame:
 
 ## Looping
 
-Add `loop` and the same scroll stack wraps instead of clamping — scrub past the
-last frame and it returns to the first, with no dead ends:
+Add `loop` and the same scroll stack wraps instead of clamping — go past the
+last frame and it returns to the first, with no dead ends. The `scroll` driver
+also takes arrow keys, so ← / → step one frame at a time (handy for precise
+navigation) and wrap the same way:
 
 <Preview>
   <TimeMachineLoopDemo />

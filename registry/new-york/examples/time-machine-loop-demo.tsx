@@ -38,8 +38,8 @@ export function TimeMachineLoopDemo() {
         className="h-[300px] w-full"
       />
       <p className="text-xs text-muted-foreground tabular-nums">
-        Scroll over it — or press ← → — {index + 1} / {IMAGES.length}, wrapping
-        past either end
+        Scroll or use ← / → — {index + 1} / {IMAGES.length}, wrapping past
+        either end
       </p>
     </div>
   )
