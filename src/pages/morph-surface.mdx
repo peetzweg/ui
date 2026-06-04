@@ -1,0 +1,227 @@
+import { MorphSurfaceDemo } from '@/registry/new-york/examples/morph-surface-demo'
+import { MorphSurfaceReactionsDemo } from '@/registry/new-york/examples/morph-surface-reactions-demo'
+import { MorphSurfaceScoreDemo } from '@/registry/new-york/examples/morph-surface-score-demo'
+import { Preview } from './_components/Preview'
+
+# MorphSurface
+
+A surface that springs between two sizes — a small trigger and a larger panel —
+morphing its width, height, and corner radius in one motion. The trigger stays
+mounted and bottom-anchored while the panel cross-fades in above it, so the box
+appears to *grow out of* the trigger rather than swap for a different element.
+
+Give an element on each side the same motion `layoutId` and it travels between
+states as the surface morphs — here the message icon flies from the trigger into
+the form header. Click the pill to expand; it dismisses on click-outside or
+Escape.
+
+<Preview>
+  <MorphSurfaceDemo />
+</Preview>
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add peetzweg/ui/morph-surface
+```
+
+Pulls the [`use-click-outside`](https://github.com/peetzweg/ui/blob/main/registry/new-york/hooks/use-click-outside.ts)
+hook (a `registryDependency`) plus `motion`.
+
+## Usage
+
+`MorphSurface` is headless: it owns the morph, the open/close state, and
+dismissal only. `collapsed` and `expanded` are your content — pass nodes, or
+render functions that receive the live `{ open, expand, collapse, setOpen }`
+state.
+
+```tsx
+import { MorphSurface } from "@/components/ui/morph-surface"
+
+<MorphSurface
+  className="border border-border bg-popover shadow-lg"
+  collapsed={({ expand }) => (
+    <div className="flex h-[44px] items-center gap-2 px-3">
+      <span className="size-5 rounded-full bg-primary" />
+      <button onClick={expand}>Feedback</button>
+    </div>
+  )}
+  expanded={
+    <form className="h-full p-2">
+      <textarea className="size-full" placeholder="What's on your mind?" />
+    </form>
+  }
+/>
+```
+
+Geometry is prop-driven — the surface needs fixed collapsed/expanded boxes to
+spring between — but everything inside is yours. `className` / `style` land on
+the morphing surface itself (give it the background, border, and shadow).
+
+## The travelling element
+
+The signature move is a single element that appears to migrate between the
+trigger and the panel. There's no special prop for it: render an element on
+each side with the **same motion `layoutId`**, and motion tweens it from one
+position (and size) to the other as the surface morphs. While open, hide it on
+the trigger side (render a same-size placeholder so layout holds) so only one
+copy is live:
+
+```tsx
+collapsed={({ open, expand }) => (
+  <footer className="flex h-[44px] items-center gap-2 px-3">
+    {open ? (
+      <span className="size-5" />
+    ) : (
+      <motion.span layoutId="dot" className="size-5 rounded-full bg-primary" />
+    )}
+    <button onClick={expand}>Feedback</button>
+  </footer>
+)}
+expanded={
+  <form className="h-full p-2">
+    <motion.span
+      layoutId="dot"
+      className="absolute left-4 top-4 size-2 rounded-full bg-primary"
+    />
+    {/* … */}
+  </form>
+}
+```
+
+## Controlled
+
+Drive it from your own state with `open` + `onOpenChange` — for syncing focus,
+running a success animation after submit, or opening from elsewhere. (The demo
+above is controlled, which is how it focuses the textarea on open and shows the
+checkmark after submit.)
+
+```tsx
+const [open, setOpen] = React.useState(false)
+
+<MorphSurface open={open} onOpenChange={setOpen} collapsed={…} expanded={…} />
+```
+
+Uncontrolled, pass `defaultOpen` instead and read changes via `onOpenChange`.
+
+## Another shape: a reaction tray
+
+The feedback form grows *vertically* into a form. The same primitive grows
+*horizontally* into a pill just as well — here a round icon button unfurls into
+a row of reactions, and the one you pick flies back into the trigger. Two things
+make it read cleanly: `collapsedHeight === expandedHeight`, so only the width
+morphs (a pure horizontal unfurl, no vertical drift), and each reaction's
+`layoutId` keys off its id (`reaction-like`, `reaction-love`, …), so the
+travelling element is whichever one you click — a moving target rather than a
+fixed dot. While open the trigger renders `null` (the picked icon has migrated
+into the tray), so there's never a duplicate `layoutId` on screen.
+
+<Preview>
+  <MorphSurfaceReactionsDemo />
+</Preview>
+
+```tsx
+const [selectedId, setSelectedId] = React.useState<string | null>(null)
+
+<MorphSurface
+  open={open}
+  onOpenChange={setOpen}
+  collapsedWidth={48} collapsedHeight={48} collapsedRadius={24}
+  expandedWidth={236} expandedHeight={48} expandedRadius={24}
+  // A ring rather than a border, so it doesn't eat 2px off the centred box.
+  className="bg-popover shadow-lg ring-1 ring-border"
+  collapsed={({ open }) =>
+    open ? null : (
+      <button onClick={() => setOpen(true)} className="flex size-full items-center justify-center">
+        {selected
+          ? <motion.span layoutId={`reaction-${selected.id}`}><selected.Icon /></motion.span>
+          : <Smile />}
+      </button>
+    )
+  }
+  expanded={
+    <div className="flex h-full items-center justify-center gap-1">
+      {REACTIONS.map(({ id, Icon }) => (
+        <motion.button
+          key={id}
+          layoutId={`reaction-${id}`}
+          onClick={() => { setSelectedId(id); setOpen(false) }}
+        >
+          <Icon />
+        </motion.button>
+      ))}
+    </div>
+  }
+/>
+```
+
+Because the trigger is a fixed 48px square and the tray a wide-but-short pill,
+the morph reads as a horizontal *unfurl* — the collapsed/expanded box sizes are
+the only thing that changes the character of the motion.
+
+## Vertical: a score picker
+
+Hold the width constant and morph the *height* instead and the same pattern
+unfurls vertically. The surface grows upward from its bottom anchor, so a
+column stacks above the trigger — here a 1–10 score, where the number you pick
+flies back down into the trigger. Same recipe as the reaction tray, rotated:
+constant `width`, a per-item `layoutId`, and `null` in the trigger while open.
+
+<Preview>
+  <MorphSurfaceScoreDemo />
+</Preview>
+
+```tsx
+const [score, setScore] = React.useState<number | null>(null)
+
+<MorphSurface
+  open={open}
+  onOpenChange={setOpen}
+  collapsedWidth={44} collapsedHeight={44} collapsedRadius={22}
+  expandedWidth={44} expandedHeight={320} expandedRadius={22}
+  className="bg-popover shadow-lg ring-1 ring-border"
+  collapsed={({ open }) =>
+    open ? null : (
+      <button onClick={() => setOpen(true)} className="flex h-11 w-full items-center justify-center">
+        {score !== null
+          ? <motion.span layoutId={`score-${score}`}>{score}</motion.span>
+          : <Star />}
+      </button>
+    )
+  }
+  expanded={
+    <div className="flex h-full flex-col items-center justify-center">
+      {[10,9,8,7,6,5,4,3,2,1].map((n) => (
+        <motion.button
+          key={n}
+          layoutId={`score-${n}`}
+          onClick={() => { setScore(n); setOpen(false) }}
+        >
+          {n}
+        </motion.button>
+      ))}
+    </div>
+  }
+/>
+```
+
+## Props
+
+| Prop                  | Type                                  | Default  | Description                                                        |
+| --------------------- | ------------------------------------- | -------- | ------------------------------------------------------------------ |
+| `collapsed`           | `MorphSurfaceContent`                 | —        | Resting trigger; always mounted, bottom-anchored. Node or `(state) => ReactNode`. |
+| `expanded`            | `MorphSurfaceContent`                 | —        | Open panel; mounted + cross-faded in while open, fills the box.    |
+| `open`                | `boolean`                             | —        | Controlled open state.                                             |
+| `defaultOpen`         | `boolean`                             | `false`  | Initial open state when uncontrolled.                              |
+| `onOpenChange`        | `(open: boolean) => void`             | —        | Notified on expand / collapse.                                     |
+| `collapsedWidth`      | `number \| "auto"`                    | `"auto"` | Collapsed width; `"auto"` fits the trigger.                        |
+| `collapsedHeight`     | `number`                              | `44`     | Collapsed height (px).                                             |
+| `expandedWidth`       | `number`                              | `360`    | Expanded width; also the reserved footprint (px).                  |
+| `expandedHeight`      | `number`                              | `200`    | Expanded height; also the reserved footprint (px).                 |
+| `collapsedRadius`     | `number`                              | `20`     | Corner radius while collapsed (px).                                |
+| `expandedRadius`      | `number`                              | `14`     | Corner radius while expanded (px).                                 |
+| `spring`              | `{ stiffness?; damping?; mass? }`     | `550 / 45 / 0.7` | Spring for the morph and cross-fade.                       |
+| `closeOnClickOutside` | `boolean`                             | `true`   | Collapse on pointer/focus outside the surface.                     |
+| `closeOnEscape`       | `boolean`                             | `true`   | Collapse on Escape while open.                                     |
+
+Plus all `div` props — `className` / `style` land on the morphing surface.

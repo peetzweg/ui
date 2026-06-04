@@ -20,6 +20,7 @@ export default defineConfig({
     {
       text: "Primitives",
       items: [
+        { text: "MorphSurface", link: "/morph-surface" },
         { text: "MultiStateButton", link: "/multi-state-button" },
         { text: "ScrollStrip", link: "/scroll-strip" },
         { text: "TimeMachine", link: "/time-machine" },

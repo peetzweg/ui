@@ -56,6 +56,18 @@
       ]
     },
     {
+      "name": "use-click-outside",
+      "type": "registry:hook",
+      "title": "useClickOutside",
+      "description": "Invoke a handler on pointer/focus events outside an element — or outside every element in an array of refs. Latest-callback ref so inline handlers don't resubscribe; toggle with an enabled flag.",
+      "files": [
+        {
+          "path": "registry/new-york/hooks/use-click-outside.ts",
+          "type": "registry:hook"
+        }
+      ]
+    },
+    {
       "name": "scroll-strip",
       "type": "registry:ui",
       "title": "ScrollStrip",
@@ -78,6 +90,20 @@
       "files": [
         {
           "path": "registry/new-york/ui/time-machine.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "morph-surface",
+      "type": "registry:ui",
+      "title": "MorphSurface",
+      "description": "A surface that springs between a small trigger and a larger panel, morphing width, height, and corner radius in one motion. Headless: owns the morph, open/close, and dismissal (click-outside + Escape) — collapsed/expanded are your content. Share a layoutId across both to travel an element between states. Controlled or uncontrolled.",
+      "dependencies": ["motion"],
+      "registryDependencies": ["use-click-outside"],
+      "files": [
+        {
+          "path": "registry/new-york/ui/morph-surface.tsx",
           "type": "registry:ui"
         }
       ]
