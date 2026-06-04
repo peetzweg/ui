@@ -9,7 +9,8 @@
     "build": "vocs build",
     "preview": "vocs preview",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "registry:validate": "pnpm dlx shadcn@latest registry validate"
   },
   "dependencies": {
     "@radix-ui/react-label": "^2.1.7",

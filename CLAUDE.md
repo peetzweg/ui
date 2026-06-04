@@ -24,7 +24,9 @@ vocs.config.ts                    docs sidebar (Primitives vs Presets)
 
 ## Adding / porting a component — the pipeline
 
-Do all of these, then `pnpm typecheck && pnpm lint && pnpm build` before committing:
+Do all of these, then
+`pnpm typecheck && pnpm lint && pnpm registry:validate && pnpm build` before
+committing (CI runs the same checks on every push/PR):
 
 1. `registry/new-york/ui/<name>.tsx` — the component.
 2. Extract reusable helpers to `registry/new-york/hooks/` or `lib/` as their own
@@ -134,4 +136,5 @@ pnpm dev         # docs site (Vocs)
 pnpm build       # static build — run before committing
 pnpm typecheck   # tsc --noEmit
 pnpm lint        # eslint
+pnpm registry:validate  # lint registry.json (schema, names, file paths)
 ```
