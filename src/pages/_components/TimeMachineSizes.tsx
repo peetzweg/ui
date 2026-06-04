@@ -2,8 +2,15 @@
 
 import { TimeMachine } from "@/registry/new-york/ui/time-machine"
 
-const IMAGES = ["tahoe", "fjord", "dunes", "canyon", "harbor"].map(
-  (seed) => `https://picsum.photos/seed/${seed}/600/400`,
+const IMAGES = [
+  "photo-1506905925346-21bda4d32df4", // mountain ridge
+  "photo-1441974231531-c6227db76b6e", // forest road
+  "photo-1470071459604-3b5ec3a7fe05", // foggy hills
+  "photo-1433086966358-54859d0ed716", // waterfall
+  "photo-1501785888041-af3ef285b470", // lake & peaks
+].map(
+  (id) =>
+    `https://images.unsplash.com/${id}?auto=format&fit=crop&w=600&h=400&q=80`,
 )
 
 // Plain images here — `frameClassName` gives every frame one uniform size/style.
@@ -28,7 +35,7 @@ export function TimeMachineSizes() {
               items={frames}
               driver="controlled"
               activeIndex={1}
-              frameClassName={`${size} overflow-hidden rounded-lg border bg-card`}
+              frameClassName={`${size} overflow-hidden rounded-lg border-2 border-white bg-white shadow-xl`}
               className="h-full w-full"
             />
           </div>

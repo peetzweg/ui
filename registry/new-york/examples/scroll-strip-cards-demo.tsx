@@ -85,7 +85,7 @@ function CreditCard({ card, active }: { card: Card; active: boolean }) {
       {/* face — the proper credit card, revealed as the clip opens */}
       <div
         className={cn(
-          "absolute inset-0 flex flex-col justify-between p-5 transition-all delay-100 duration-300",
+          "absolute inset-0 flex flex-col justify-between p-5 transition-[transform,opacity] delay-100 duration-200 ease-[cubic-bezier(0.23,1,0.32,1)]",
           active ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0",
         )}
       >

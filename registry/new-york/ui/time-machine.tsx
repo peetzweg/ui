@@ -171,7 +171,10 @@ export const TimeMachine = React.forwardRef<HTMLDivElement, TimeMachineProps>(
               key={i}
               className={cn("[grid-area:1/1]", frameClassName)}
               initial={false}
-              animate={{ y, scale, transition }}
+              // Animate the full `transform` string (not motion's `y`/`scale`
+              // shorthands) so it composites off the main thread — this stack
+              // animates while the page is busy decoding images.
+              animate={{ transform: `translateY(${y}px) scale(${scale})`, transition }}
               style={{
                 opacity: passed ? 0 : 1,
                 filter: passed && blur ? `blur(${blur}px)` : undefined,
