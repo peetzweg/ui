@@ -13,8 +13,6 @@ recede motion. **You own each frame entirely**: size, aspect ratio, border,
 background, and contents (an image, a card, a link, an auto-playing slideshow —
 any React node).
 
-## Bring your own frame
-
 Because `items` is just `ReactNode[]`, the frame shape and style are yours —
 here the same stack rendered as horizontal and vertical credit cards (the
 ISO `1.586` ratio), each a gradient card the component never styles:
@@ -29,6 +27,28 @@ const cards = accounts.map((a) => (
 ))
 
 <TimeMachine items={cards} className="h-[240px] w-[360px]" />
+```
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add peetzweg/ui/time-machine
+```
+
+Depends only on `motion`.
+
+## Usage
+
+```tsx
+import { TimeMachine } from "@/components/ui/time-machine"
+
+const frames = photos.map((src) => (
+  <div key={src} className="h-48 w-72 overflow-hidden rounded-xl border">
+    <img src={src} alt="" className="h-full w-full object-cover" />
+  </div>
+))
+
+<TimeMachine items={frames} className="h-[400px] w-full" />
 ```
 
 ## Controlled
@@ -58,28 +78,6 @@ component works at any scale:
 
 <TimeMachineSizes />
 
-## Installation
-
-```bash
-pnpm dlx shadcn@latest add peetzweg/ui/time-machine
-```
-
-Depends only on `motion`.
-
-## Usage
-
-```tsx
-import { TimeMachine } from "@/components/ui/time-machine"
-
-const frames = photos.map((src) => (
-  <div key={src} className="h-48 w-72 overflow-hidden rounded-xl border">
-    <img src={src} alt="" className="h-full w-full object-cover" />
-  </div>
-))
-
-<TimeMachine items={frames} className="h-[400px] w-full" />
-```
-
 ## Props
 
 | Prop            | Type                                              | Default                              | Description                                            |
@@ -98,3 +96,4 @@ const frames = photos.map((src) => (
 | `spring`        | `{ stiffness?; damping?; mass? }`                 | `{ stiffness: 250, damping: 20, mass: 0.5 }` | Frame transition spring.                       |
 | `frameClassName`| `string`                                          | —                                    | Extra classes on every frame wrapper (e.g. one size).  |
 | `className`     | `string`                                          | —                                    | Classes on the root (set the overall size here).       |
+
