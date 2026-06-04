@@ -1,4 +1,5 @@
 import { TimeMachineDemo } from '@/registry/new-york/examples/time-machine-demo'
+import { TimeMachineLoopDemo } from '@/registry/new-york/examples/time-machine-loop-demo'
 import { TimeMachineSizes } from './_components/TimeMachineSizes'
 import { TimeMachineCards } from './_components/TimeMachineCards'
 import { TimeMachineMixed } from './_components/TimeMachineMixed'
@@ -60,6 +61,21 @@ work in `scroll` and `keyboard` modes.
 <Preview>
   <TimeMachineDemo />
 </Preview>
+
+## Looping
+
+Set `loop` to wrap around at the ends instead of clamping — step past the last
+frame and it returns to the first, and vice-versa. This stack is `scroll`-driven
+and uncontrolled: scroll over it to scrub (arrow keys work too), and it never
+hits a dead end.
+
+<Preview>
+  <TimeMachineLoopDemo />
+</Preview>
+
+```tsx
+<TimeMachine items={frames} driver="scroll" loop />
+```
 
 ## Mixed shapes & sizes
 
