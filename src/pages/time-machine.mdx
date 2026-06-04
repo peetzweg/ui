@@ -1,4 +1,5 @@
 import { TimeMachineDemo } from '@/registry/new-york/examples/time-machine-demo'
+import { TimeMachineScrollDemo } from '@/registry/new-york/examples/time-machine-scroll-demo'
 import { TimeMachineLoopDemo } from '@/registry/new-york/examples/time-machine-loop-demo'
 import { TimeMachineSizes } from './_components/TimeMachineSizes'
 import { TimeMachineCards } from './_components/TimeMachineCards'
@@ -62,12 +63,24 @@ work in `scroll` and `keyboard` modes.
   <TimeMachineDemo />
 </Preview>
 
+## Scroll
+
+Set `driver="scroll"` and the stack scrubs on wheel within its own bounds — no
+page-scroll hijacking. It's uncontrolled here, so the component owns the index;
+by default it clamps at the first and last frame:
+
+<Preview>
+  <TimeMachineScrollDemo />
+</Preview>
+
+```tsx
+<TimeMachine items={frames} driver="scroll" />
+```
+
 ## Looping
 
-Set `loop` to wrap around at the ends instead of clamping — step past the last
-frame and it returns to the first, and vice-versa. This stack is `scroll`-driven
-and uncontrolled: scroll over it to scrub (arrow keys work too), and it never
-hits a dead end.
+Add `loop` and the same scroll stack wraps instead of clamping — scrub past the
+last frame and it returns to the first, with no dead ends:
 
 <Preview>
   <TimeMachineLoopDemo />
