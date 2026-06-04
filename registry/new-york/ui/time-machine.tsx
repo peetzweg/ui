@@ -19,7 +19,9 @@ export interface TimeMachineProps
    * - `keyboard` — arrow keys only
    * - `controlled` — parent owns `activeIndex`; no internal listeners
    *
-   * Arrow keys also work in `scroll` mode.
+   * Arrow keys also work in `scroll` mode. In both `scroll` and `keyboard`,
+   * keys act only on the stack you're hovering or have focused, so multiple
+   * instances on one page don't all respond at once.
    */
   driver?: "scroll" | "keyboard" | "controlled"
   /** Controlled active index. */
@@ -103,10 +105,30 @@ export const TimeMachine = React.forwardRef<HTMLDivElement, TimeMachineProps>(
       [isControlled, items.length, loop, onIndexChange],
     )
 
-    // Arrow-key navigation (everything but the fully-controlled mode).
+    // Wheel + arrow keys both scope to this stack via its container ref, so
+    // several mounted TimeMachines can coexist without fighting over input.
+    const containerRef = React.useRef<HTMLDivElement | null>(null)
+    const setRefs = React.useCallback(
+      (node: HTMLDivElement | null) => {
+        containerRef.current = node
+        if (typeof forwardedRef === "function") forwardedRef(node)
+        else if (forwardedRef) forwardedRef.current = node
+      },
+      [forwardedRef],
+    )
+
+    // Arrow-key navigation (everything but the fully-controlled mode), engaged
+    // only while this stack is hovered or holds focus — otherwise every mounted
+    // stack on the page would step on the same keypress.
     React.useEffect(() => {
       if (driver === "controlled") return
       function onKey(event: KeyboardEvent) {
+        const el = containerRef.current
+        if (
+          !el ||
+          (!el.matches(":hover") && !el.contains(document.activeElement))
+        )
+          return
         if (event.key === "ArrowRight" || event.key === "ArrowDown") {
           setIndex((i) => i + 1)
         } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
@@ -121,16 +143,6 @@ export const TimeMachine = React.forwardRef<HTMLDivElement, TimeMachineProps>(
     }, [driver, setIndex])
 
     // Wheel-to-scrub, scoped to the component (no document.body mutation).
-    const containerRef = React.useRef<HTMLDivElement | null>(null)
-    const setRefs = React.useCallback(
-      (node: HTMLDivElement | null) => {
-        containerRef.current = node
-        if (typeof forwardedRef === "function") forwardedRef(node)
-        else if (forwardedRef) forwardedRef.current = node
-      },
-      [forwardedRef],
-    )
-
     React.useEffect(() => {
       if (driver !== "scroll") return
       const el = containerRef.current
