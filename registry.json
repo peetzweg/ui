@@ -107,6 +107,18 @@
           "type": "registry:ui"
         }
       ]
+    },
+    {
+      "name": "tactile-button",
+      "type": "registry:ui",
+      "title": "TactileButton",
+      "description": "A realistic neumorphic hardware key that physically depresses when pressed: the cast shadow collapses, a dark shadow sinks inside, and the face drops into its well. Modelled on the Teenage Engineering EP-133 K.O. II keypad. Headless — owns the press mechanic (shadow morph, content sink, pointer + keyboard wiring, a controlled latch); you own the cap colors (via --key-* custom properties), size, and content.",
+      "files": [
+        {
+          "path": "registry/new-york/ui/tactile-button.tsx",
+          "type": "registry:ui"
+        }
+      ]
     }
   ]
 }
