@@ -23,13 +23,17 @@ export default defineConfig({
         { text: "MorphSurface", link: "/morph-surface" },
         { text: "MultiStateButton", link: "/multi-state-button" },
         { text: "ScrollStrip", link: "/scroll-strip" },
+        { text: "TickTape", link: "/tick-tape" },
         { text: "TimeMachine", link: "/time-machine" },
       ],
     },
     {
       // Opinionated, domain-specific presets over the primitives above.
       text: "Presets",
-      items: [{ text: "TransactionButton", link: "/transaction-button" }],
+      items: [
+        { text: "TimerSurface", link: "/timer-surface" },
+        { text: "TransactionButton", link: "/transaction-button" },
+      ],
     },
   ],
 })

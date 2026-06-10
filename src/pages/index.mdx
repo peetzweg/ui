@@ -25,6 +25,7 @@ styling:
 - [**MorphSurface**](/morph-surface) — a surface that springs between a small trigger and a larger panel, morphing size and radius in one motion.
 - [**MultiStateButton**](/multi-state-button) — generic multi-state animated button with slot-machine label transitions.
 - [**ScrollStrip**](/scroll-strip) — horizontal filmstrip of clipped slivers; the active frame expands via a clip-path reveal.
+- [**TickTape**](/tick-tape) — tape-measure value scrubber: drag a strip of ticks under a fixed pointer, with a velocity-scaled glow trailing the motion.
 - [**TimeMachine**](/time-machine) — stacked-frame gallery with a 3D-recede animation.
 
 ## Presets
@@ -33,6 +34,7 @@ Opinionated, domain-specific layers over a primitive. A preset bakes in a
 state union, default content, and semantics — the mechanics stay in the
 primitive, and every default remains overridable:
 
+- [**TimerSurface**](/timer-surface) — iOS-style sleep-timer panel over [MorphSurface](/morph-surface) and [TickTape](/tick-tape): a duration pill morphs into a scrubbable minute tape with a start button.
 - [**TransactionButton**](/transaction-button) — seven-state transaction-submission preset over [MultiStateButton](/multi-state-button).
 
 Every component is plain React — no framework lock-in — and depends only on
