@@ -23,6 +23,7 @@ export default defineConfig({
         { text: "MorphSurface", link: "/morph-surface" },
         { text: "MultiStateButton", link: "/multi-state-button" },
         { text: "ScrollStrip", link: "/scroll-strip" },
+        { text: "TactileButton", link: "/tactile-button" },
         { text: "TickTape", link: "/tick-tape" },
         { text: "TimeMachine", link: "/time-machine" },
       ],

@@ -1,0 +1,99 @@
+import { TactileButtonDemo } from '@/registry/new-york/examples/tactile-button-demo'
+import { TactileButtonSequencerDemo } from '@/registry/new-york/examples/tactile-button-sequencer-demo'
+import { Preview } from './_components/Preview'
+
+# TactileButton
+
+A realistic, neumorphic **hardware key** — a physical button that *depresses*
+when you press it. The cast shadow collapses, a dark shadow sinks inside, and
+the face drops into its well, all in one short morph. Modelled on the
+[Teenage Engineering EP-133 K.O. II](https://teenage.engineering/products/ep-133)
+keypad. It owns **only the press mechanic** — the raised⇄pressed shadow morph,
+the content sink, pointer + keyboard (Space/Enter) wiring, and a controlled
+`pressed` latch. **You own appearance and content**: the cap colors through the
+`--key-*` custom properties, the size through `className`, and any icon or
+label as children.
+
+Push the keys — they sink in and pop back. Each key is set into its own
+near-black housing: that surface is yours (the demo wraps every key in a
+`bg-[#171717]` slot), and it's where the key's cast shadow lands, so each one
+reads as a recessed hardware button.
+
+<Preview>
+  <TactileButtonDemo />
+</Preview>
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add peetzweg/ui/tactile-button
+```
+
+No dependencies — plain React, styled with Tailwind and CSS custom properties.
+
+## Usage
+
+```tsx
+import { TactileButton } from "@/components/ui/tactile-button"
+
+<TactileButton onClick={record}>
+  <span className="text-white">REC</span>
+</TactileButton>
+```
+
+The key is a real `<button>`, so every `ButtonHTMLAttributes` prop (`onClick`,
+`disabled`, `aria-*`, …) passes straight through.
+
+## Recoloring the cap
+
+Appearance lives entirely in four custom properties, so you recolor a key
+without touching the mechanic — set them via `style` or a Tailwind arbitrary
+`[--key-face:…]` class. The morph derives both shadow stacks from them:
+
+| Property          | Role                                            | Default            |
+| ----------------- | ----------------------------------------------- | ------------------ |
+| `--key-face`      | the cap surface (and the element background)    | `#c7c3c0`          |
+| `--key-highlight` | the lit top-left bevel of a raised key          | `#ffffff`          |
+| `--key-drop`      | the shadow cast under a raised key              | `rgba(0,0,0,.377)` |
+| `--key-press`     | the dark inner shadow of a depressed key        | `#000000`          |
+| `--key-radius`    | corner radius                                   | `10px`             |
+
+```tsx
+<TactileButton style={{ "--key-face": "#d42a02", "--key-highlight": "#fb702c" }}>
+  <span className="text-white">RECORD</span>
+</TactileButton>
+```
+
+The key defaults to `5.7em` square, so a parent `font-size` scales the whole
+thing; override the size with `className` (e.g. `className="size-16"`).
+
+## Latched / active keys
+
+Left uncontrolled the key is momentary — down while you hold it, back up on
+release. Pass `pressed` to *hold* it down: the controlled latch is ideal for
+active states like a lit sequencer step or a toggle that's on. The momentary
+press still plays on top while you click.
+
+<Preview>
+  <TactileButtonSequencerDemo />
+</Preview>
+
+```tsx
+<TactileButton
+  pressed={step.on}
+  onClick={() => toggle(step.id)}
+  style={step.on ? activeColors : idleColors}
+>
+  {step.index}
+</TactileButton>
+```
+
+## Props
+
+| Prop      | Type      | Default | Description                                                                                   |
+| --------- | --------- | ------- | --------------------------------------------------------------------------------------------- |
+| `pressed` | `boolean` | —       | Controlled "held down" state for latched / active keys. Omit for a purely momentary key.      |
+| `...props`| `ButtonHTMLAttributes` | — | Everything a native `<button>` takes — `onClick`, `disabled`, `aria-*`, `className`, `style`. |
+
+Respects `prefers-reduced-motion`: the content-sink travel is dropped while the
+shadow morph still plays, so the press always reads.

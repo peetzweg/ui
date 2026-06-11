@@ -38,3 +38,9 @@ yarn-error.log*
 
 # Vocs route typegen (auto-generated)
 /src/pages.gen.ts
+
+# Claude Code session state
+/.claude/
+
+# Scratch media files
+*.mp4
