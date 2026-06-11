@@ -1,0 +1,79 @@
+import { TimerSurfaceDemo } from '@/registry/new-york/examples/timer-surface-demo'
+import { Preview } from './_components/Preview'
+import { PresetBanner } from './_components/PresetBanner'
+
+# TimerSurface
+
+<PresetBanner base="MorphSurface" href="/morph-surface">
+  Composed with <a href="/tick-tape">TickTape</a>; bakes in the sleep-timer
+  domain — minute range, duration formatting, palette, and start semantics.
+</PresetBanner>
+
+An iOS-style sleep timer. A compact pill showing the set duration morphs into
+a dark panel: a minute tape (a tick per minute, labels every five) scrubbed
+under a fixed pointer, a live `h:mm:ss` readout, and a start button. Scrub the
+tape and the readout follows; press start and the surface reports the duration
+and collapses back into the pill.
+
+The mechanics all live in the primitives — the morph, dismissal, and
+click-outside come from [MorphSurface](/morph-surface); the scrubbing,
+snapping, glow trail, and per-minute haptic tick on mobile from
+[TickTape](/tick-tape). This layer is the timer domain:
+the orange-on-black palette, the formatting, and start/collapse semantics.
+
+Click the pill, drag the tape, start the timer:
+
+<Preview>
+  <TimerSurfaceDemo />
+</Preview>
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add peetzweg/ui/timer-surface
+```
+
+Pulls [`morph-surface`](/morph-surface) and [`tick-tape`](/tick-tape) (and
+their dependencies) as `registryDependencies`, plus `motion` and
+`lucide-react`.
+
+## Usage
+
+```tsx
+import { TimerSurface } from "@/components/ui/timer-surface"
+
+<TimerSurface
+  defaultMinutes={15}
+  maxMinutes={120}
+  onStart={(minutes) => startSleepTimer(minutes)}
+/>
+```
+
+Uncontrolled by default. Both axes can be controlled independently: the
+duration via `minutes` + `onMinutesChange`, the surface via `open` +
+`onOpenChange` (both forwarded to MorphSurface). The start button is disabled
+at `0:00`.
+
+Swap the text with `startLabel` and the readout format with `formatDuration`
+(the default `formatTimerDuration` renders `15:00` / `1:40:00` and is
+exported). `className` lands on the morphing surface — override the palette
+there. For a different layout entirely, drop down to the primitives.
+
+## Props
+
+| Prop              | Type                          | Default         | Description                                            |
+| ----------------- | ----------------------------- | --------------- | ------------------------------------------------------ |
+| `minutes`         | `number`                      | —               | Controlled duration, in whole minutes.                 |
+| `defaultMinutes`  | `number`                      | `15`            | Initial duration when uncontrolled.                    |
+| `onMinutesChange` | `(minutes: number) => void`   | —               | Fires live while scrubbing.                            |
+| `maxMinutes`      | `number`                      | `120`           | Last tick on the tape.                                 |
+| `onStart`         | `(minutes: number) => void`   | —               | Fired with the duration when start is pressed.         |
+| `startLabel`      | `ReactNode`                   | `"Start Timer"` | Start button content.                                  |
+| `formatDuration`  | `(minutes: number) => string` | `formatTimerDuration` | Readout + trigger text.                          |
+| `open`            | `boolean`                     | —               | Controlled open state (forwarded to MorphSurface).     |
+| `defaultOpen`     | `boolean`                     | `false`         | Initial open state when uncontrolled.                  |
+| `onOpenChange`    | `(open: boolean) => void`     | —               | Notified on expand / collapse.                         |
+| `collapseOnStart` | `boolean`                     | `true`          | Collapse the surface after starting.                   |
+| `expandedWidth`   | `number`                      | `480`           | Panel width; also the reserved footprint (px).         |
+| `expandedHeight`  | `number`                      | `210`           | Panel height; also the reserved footprint (px).        |
+| `className`       | `string`                      | —               | Lands on the morphing surface — override palette here. |

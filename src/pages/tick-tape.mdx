@@ -1,0 +1,236 @@
+import { TickTapeDemo } from '@/registry/new-york/examples/tick-tape-demo'
+import { TickTapeDialDemo } from '@/registry/new-york/examples/tick-tape-dial-demo'
+import { TickTapeNeedleDemo } from '@/registry/new-york/examples/tick-tape-needle-demo'
+import { TickTapeFillDemo } from '@/registry/new-york/examples/tick-tape-fill-demo'
+import { TickTapeMotionDemo } from '@/registry/new-york/examples/tick-tape-motion-demo'
+import { TickTapeVerticalDemo } from '@/registry/new-york/examples/tick-tape-vertical-demo'
+import { Preview } from './_components/Preview'
+
+# TickTape
+
+A tape-measure value scrubber. A strip of ticks — one per `step`, a label on
+every Nth — slides under a fixed center indicator; drag it, scroll it, tap a
+tick, or use the arrow keys, and it springs to position and snaps to the
+nearest tick. While the tape moves, ticks near the indicator brighten and
+stretch with a velocity-scaled glow that trails the motion — fast scrubs leave
+a streak, slow ones barely register.
+
+The component owns the mechanics: geometry, the spring, snapping, glow, and
+input wiring (drag with pointer capture, element-scoped wheel, slider-style
+keyboard). You own the appearance, via `tickClassName` / `glowClassName` /
+`labelClassName`, a `formatLabel` render prop, and a replaceable `indicator`.
+
+Drag the tape (or scroll over it) to scrub:
+
+<Preview>
+  <TickTapeDemo />
+</Preview>
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add peetzweg/ui/tick-tape
+```
+
+Pulls the [`clamp`](https://github.com/peetzweg/ui/blob/main/registry/new-york/lib/clamp.ts)
+lib and the [`use-haptic`](https://github.com/peetzweg/ui/blob/main/registry/new-york/hooks/use-haptic.ts)
+hook (`registryDependencies`) plus `motion`.
+
+## Usage
+
+```tsx
+import { TickTape } from "@/components/ui/tick-tape"
+
+const [value, setValue] = React.useState(50)
+
+<TickTape
+  min={0}
+  max={100}
+  majorEvery={10}
+  value={value}
+  onValueChange={setValue}
+  className="w-full"
+/>
+```
+
+Works controlled (`value` + `onValueChange`) or uncontrolled (`defaultValue`).
+The element is a focusable `role="slider"` — arrow keys step one tick,
+PageUp/PageDown step one major, Home/End jump to the ends. Wheel input is
+scoped to the element and the page never scrolls, so several tapes coexist on
+one page.
+
+## Haptics
+
+On mobile, every tick crossed during a scrub emits a light haptic — so the
+tape *feels* like a physical detent wheel. Android uses `navigator.vibrate`;
+iOS Safari (17.4+) has no vibrate API, so the hook clicks a hidden
+`<input type="checkbox" switch>`, whose native toggle haptic is currently the
+only way to reach the Taptic Engine from the web (the
+[web-haptics](https://haptics.lochie.me/) technique). Desktop is a silent
+no-op; opt out with `haptics={false}`. Only user input ticks — controlled
+value updates from outside never buzz.
+
+## Fractional steps and custom styling
+
+`step` can be fractional — values snap to the step's decimal precision, so a
+`0.1` step never shows float drift. Restyle every layer through the className
+slots: the base tick, the glow overlay (it sits on top, so a light color reads
+as the tape "heating up"), and the labels. `formatLabel` controls the major
+tick text, and the indicator inherits `currentColor`.
+
+<Preview>
+  <TickTapeDialDemo />
+</Preview>
+
+```tsx
+<TickTape
+  min={88}
+  max={108}
+  step={0.1}
+  majorEvery={10}
+  tickGap={9}
+  value={frequency}
+  onValueChange={setFrequency}
+  formatLabel={(v) => v.toFixed(0)}
+  tickClassName="bg-emerald-400/60"
+  glowClassName="bg-emerald-100"
+  labelClassName="text-emerald-400/80"
+/>
+```
+
+## Styling the selected side
+
+Every tick and label carries `data-side="before" | "after"` relative to the
+current value, plus `data-selected` on the exact tick — so dimming, hiding, or
+recoloring the unselected half is plain Tailwind, no render props. The
+boundary moves live while you scrub:
+
+<Preview>
+  <TickTapeFillDemo />
+</Preview>
+
+```tsx
+<TickTape
+  value={volume}
+  onValueChange={setVolume}
+  tickClassName="bg-sky-500 data-[side=after]:bg-muted-foreground/20"
+  labelClassName="data-[side=after]:opacity-30"
+/>
+```
+
+(`data-[side=after]:opacity-0` hides the unselected half outright; the root
+also exposes `data-dragging` while a drag is live.)
+
+## Custom indicator
+
+`indicator` replaces the default triangle (which inherits `currentColor`).
+The slot's wrapper sits below (or beside) the tape, but the root is
+`position: relative` — so an absolutely-positioned element in the slot can
+draw across the tape itself, like this needle:
+
+<Preview>
+  <TickTapeNeedleDemo />
+</Preview>
+
+```tsx
+<TickTape
+  value={length}
+  onValueChange={setLength}
+  indicator={
+    <>
+      {/* needle across the ticks (top-6 clears the label row) */}
+      <span className="absolute left-1/2 top-6 h-7 w-px -translate-x-1/2 bg-red-500" />
+      {/* in-flow dot where the triangle would be */}
+      <span className="size-1.5 rounded-full bg-red-500" />
+    </>
+  }
+/>
+```
+
+## Tuning the motion
+
+The tape spring and the glow are both prop-driven: `glowRadius` (reach from
+the center), `glowVelocity` (scrub speed for full glow — lower = lights up
+sooner), `glowStretch` (how much a glowing tick elongates), `glowIntensity`
+(peak opacity; `0` disables), and `spring` for the tape itself. Scrub each of
+these at the same speed:
+
+<Preview>
+  <TickTapeMotionDemo />
+</Preview>
+
+```tsx
+<TickTape glowIntensity={0} />                 {/* just the spring */}
+<TickTape />                                   {/* default */}
+<TickTape
+  glowRadius={140}
+  glowVelocity={150}
+  glowStretch={1.6}
+  spring={{ stiffness: 220, damping: 28 }}     {/* looser tape */}
+/>
+```
+
+## Vertical
+
+`orientation="vertical"` scrubs along y — labels sit beside the ticks and the
+indicator points at them from the right. Size the scrubbed axis via
+`className` (`h-56` here); the cross axis sizes itself. `inverted` flips the
+tape so values increase toward the top (it works horizontally too), and arrow
+keys keep following the visual direction — here, up warms.
+
+Combined with the `data-side` styling, the at-or-below half reads like a
+thermometer's mercury column:
+
+<Preview>
+  <TickTapeVerticalDemo />
+</Preview>
+
+```tsx
+<TickTape
+  orientation="vertical"
+  inverted
+  min={15}
+  max={30}
+  step={0.5}
+  majorEvery={2}
+  value={temperature}
+  onValueChange={setTemperature}
+  className="h-56 text-rose-500"
+  tickClassName="bg-rose-500/80 data-[side=after]:bg-muted-foreground/25"
+  labelClassName="text-rose-500 data-[side=after]:text-muted-foreground/60"
+/>
+```
+
+## Props
+
+| Prop            | Type                                | Default | Description                                                          |
+| --------------- | ----------------------------------- | ------- | -------------------------------------------------------------------- |
+| `min`           | `number`                            | `0`     | Value at the first tick.                                             |
+| `max`           | `number`                            | `100`   | Value at the last tick.                                              |
+| `step`          | `number`                            | `1`     | Value distance between adjacent ticks; may be fractional.            |
+| `value`         | `number`                            | —       | Controlled value (snapped to a tick).                                |
+| `defaultValue`  | `number`                            | `min`   | Initial value when uncontrolled.                                     |
+| `onValueChange` | `(value: number) => void`           | —       | Fires live as the snapped value changes while scrubbing.             |
+| `orientation`   | `"horizontal" \| "vertical"`        | `"horizontal"` | Scrub axis; size it via `className`, the cross axis sizes itself. |
+| `inverted`      | `boolean`                           | `false` | Values increase toward the start (left / top) instead.              |
+| `tickGap`       | `number`                            | `12`    | Distance between tick centers along the tape (px).                   |
+| `tickWidth`     | `number`                            | `2`     | Tick thickness along the tape (px).                                  |
+| `tickHeight`    | `number`                            | `28`    | Tick length across the tape (px).                                    |
+| `majorEvery`    | `number`                            | `5`     | Every Nth tick is a labeled major.                                   |
+| `formatLabel`   | `(value: number) => ReactNode`      | `value` | Label content for major ticks.                                       |
+| `glowRadius`    | `number`                            | `56`    | Reach of the scrub glow from the center (px); `0` disables.          |
+| `glowIntensity` | `number`                            | `1`     | Peak glow opacity, 0–1.                                              |
+| `glowStretch`   | `number`                            | `0.4`   | Elongation of a fully-glowing tick (`scale: 1 + glowStretch`).       |
+| `glowVelocity`  | `number`                            | `600`   | Scrub speed (px/s) at which the glow reaches full strength.          |
+| `indicator`     | `ReactNode`                         | ▲       | Replaces the center indicator; default triangle uses `currentColor`. |
+| `haptics`       | `boolean`                           | `true`  | Haptic tick per value change on mobile; no-op on desktop.            |
+| `spring`        | `{ stiffness?; damping?; mass? }`   | `550 / 45 / 0.8` | Spring driving the tape position.                           |
+| `tickClassName` | `string`                            | —       | Base tick layer (default `bg-muted-foreground/50`).                  |
+| `glowClassName` | `string`                            | —       | Glow overlay layer (default `bg-foreground`).                        |
+| `labelClassName`| `string`                            | —       | Major tick labels (default `text-muted-foreground`).                 |
+
+Plus all `div` props — `className` / `style` land on the root slider element
+(size it there; the tape fills the width and fades at the edges).
+
+With `prefers-reduced-motion` the tape repositions instantly and the glow
+stays off; value changes still announce through the slider semantics.

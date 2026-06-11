@@ -129,6 +129,28 @@ intro — what it is, the core mechanic, and what "you own" vs the component
 - A fixed-pixel, explicit API can beat a clever "automatic" one if the clever
   version is fragile. Prefer predictable.
 
+## Decision log
+
+Only decisions that can't be re-derived from the code. Per-component
+rationale lives in the component's docblock (it ships with the install) and
+its docs page — not here. Keep this list short; cut entries that stop
+mattering.
+
+- **GitHub registry, no server** — the shadcn CLI reads `registry.json` +
+  source straight from the repo; installs pin with `#tag` / `#commit`. A
+  Next.js registry app was dropped for this.
+- **The `@` alias is patched into Vocs** (`patches/vocs.patch`) — Vocs has no
+  alias hook; details in the `vocs.config.ts` footer comment. Re-check the
+  patch when bumping Vocs.
+- **Theme tokens:** primitives style with shadcn theme tokens only, so any
+  theme fits. Presets may use literal palette colors when the look *is* the
+  domain (TransactionButton's state colors, TimerSurface's orange-on-black).
+- **Haptics** come from the `use-haptic` registry hook (the web-haptics
+  switch-checkbox trick — see its docblock), never an npm dep. Components
+  fire it only on user-input commits, never on controlled/external updates.
+- **Naming:** primitives are mechanic noun pairs (ScrollStrip, TickTape);
+  presets are domain + base surface (TransactionButton, TimerSurface).
+
 ## Commands
 
 ```bash

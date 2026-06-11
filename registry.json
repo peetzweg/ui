@@ -95,6 +95,46 @@
       ]
     },
     {
+      "name": "use-haptic",
+      "type": "registry:hook",
+      "title": "useHaptic",
+      "description": "A light haptic tick on mobile, silent no-op on desktop. navigator.vibrate on Android/Chromium; on iOS Safari 17.4+ clicks a hidden switch checkbox to fire the native toggle haptic (the web-haptics technique). Rate-limited, lazily mounted, SSR-safe.",
+      "files": [
+        {
+          "path": "registry/new-york/hooks/use-haptic.ts",
+          "type": "registry:hook"
+        }
+      ]
+    },
+    {
+      "name": "tick-tape",
+      "type": "registry:ui",
+      "title": "TickTape",
+      "description": "A tape-measure value scrubber: a strip of ticks dragged, wheeled, tapped, or arrow-keyed under a fixed center indicator, snapping to the nearest tick with a velocity-scaled proximity glow trailing the motion. Haptic tick per step on mobile. Headless mechanics — tick/glow/label/indicator appearance via className slots and render props. Controlled or uncontrolled.",
+      "dependencies": ["motion"],
+      "registryDependencies": ["clamp", "use-haptic"],
+      "files": [
+        {
+          "path": "registry/new-york/ui/tick-tape.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "timer-surface",
+      "type": "registry:ui",
+      "title": "TimerSurface",
+      "description": "Sleep-timer preset over MorphSurface + TickTape. A duration pill morphs into a dark iOS-style panel: a minute tape scrubbed under a fixed pointer, live duration readout, and a start button. Bakes in the timer domain — minute range, h:mm:ss formatting, orange-on-black palette, start/collapse semantics.",
+      "dependencies": ["motion", "lucide-react"],
+      "registryDependencies": ["morph-surface", "tick-tape"],
+      "files": [
+        {
+          "path": "registry/new-york/ui/timer-surface.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "morph-surface",
       "type": "registry:ui",
       "title": "MorphSurface",
